@@ -1,0 +1,168 @@
+import React from "react";
+import "./Sidebar.css";
+
+export default function Sidebar({
+  activeView,
+  setActiveView,
+  chatSessions,
+  currentSessionId,
+  onSelectSession,
+  onNewChat,
+  onDeleteSession,
+  currentJobDescription,
+  currentMatchResult,
+  onClearJobContext,
+  onOpenSettings,
+  isOpen,
+  onCloseMobile,
+}) {
+  return (
+    <>
+      {/* Mobile overlay */}
+      {isOpen && <div className="sidebar-overlay" onClick={onCloseMobile} />}
+
+      <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
+        {/* Brand header */}
+        <div className="sidebar-header">
+          <div className="sidebar-brand" onClick={() => setActiveView("chat")}>
+            <div className="brand-avatar">C</div>
+            <div className="brand-text">
+              <h1 className="brand-title">Chinnu AI</h1>
+              <p className="brand-subtitle">AI Candidate Assistant</p>
+            </div>
+          </div>
+          <button
+            className="mobile-close-btn"
+            onClick={onCloseMobile}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* New chat button */}
+        <div className="sidebar-action">
+          <button className="new-chat-btn" onClick={onNewChat}>
+            <span className="btn-icon">+</span>
+            <span>New Chat</span>
+          </button>
+        </div>
+
+        {/* Active job context badge if present */}
+        {currentJobDescription && (
+          <div className="sidebar-job-badge">
+            <div className="job-badge-header">
+              <span className="job-badge-title">Active Job Match</span>
+              <button
+                className="job-badge-clear"
+                onClick={onClearJobContext}
+                title="Clear job context"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="job-badge-content" onClick={() => setActiveView("job")}>
+              <span className="job-badge-role">
+                {currentJobDescription.job_title || "Evaluated Role"}
+              </span>
+              {currentMatchResult?.match_score != null && (
+                <span className="job-badge-score">
+                  {Math.round(currentMatchResult.match_score)}% Match
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Chat history list */}
+        <div className="sidebar-history">
+          <div className="history-label">Recent Chats</div>
+          <div className="history-list">
+            {chatSessions.length === 0 ? (
+              <div className="history-empty">No previous chats</div>
+            ) : (
+              chatSessions.map((session) => (
+                <div
+                  key={session.id}
+                  className={`history-item ${
+                    activeView === "chat" && currentSessionId === session.id
+                      ? "history-item--active"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    onSelectSession(session.id);
+                    setActiveView("chat");
+                    if (onCloseMobile) onCloseMobile();
+                  }}
+                >
+                  <span className="history-icon">💬</span>
+                  <span className="history-title" title={session.title}>
+                    {session.title || "Recruiter Conversation"}
+                  </span>
+                  <button
+                    className="history-delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteSession(session.id);
+                    }}
+                    title="Delete chat"
+                  >
+                    🗑
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Navigation bottom menu */}
+        <div className="sidebar-nav">
+          <button
+            className={`nav-item ${activeView === "chat" ? "nav-item--active" : ""}`}
+            onClick={() => {
+              setActiveView("chat");
+              if (onCloseMobile) onCloseMobile();
+            }}
+          >
+            <span className="nav-icon">💬</span>
+            <span className="nav-text">Conversation</span>
+          </button>
+
+          <button
+            className={`nav-item ${activeView === "profile" ? "nav-item--active" : ""}`}
+            onClick={() => {
+              setActiveView("profile");
+              if (onCloseMobile) onCloseMobile();
+            }}
+          >
+            <span className="nav-icon">👤</span>
+            <span className="nav-text">Candidate Profile</span>
+          </button>
+
+          <button
+            className={`nav-item ${activeView === "job" ? "nav-item--active" : ""}`}
+            onClick={() => {
+              setActiveView("job");
+              if (onCloseMobile) onCloseMobile();
+            }}
+          >
+            <span className="nav-icon">📊</span>
+            <span className="nav-text">Analyze Job</span>
+            {currentMatchResult && <span className="nav-dot" />}
+          </button>
+
+          <button
+            className="nav-item"
+            onClick={() => {
+              onOpenSettings();
+              if (onCloseMobile) onCloseMobile();
+            }}
+          >
+            <span className="nav-icon">⚙️</span>
+            <span className="nav-text">Settings</span>
+          </button>
+        </div>
+      </aside>
+    </>
+  );
+}

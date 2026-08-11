@@ -1,0 +1,23 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+.pytest_cache/
+
+# Node / React Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,101 @@
+{
+  "name": "Banoth Sree Ram Nayak",
+  "email": "banothsreeram1209@gmail.com",
+  "phone": "+91-8340929339",
+  "linkedin": "linkedin.com/in/banoth-sree-ram",
+  "github": "github.com/sreeram110909",
+  "total_experience_years": 1.0,
+  "skills": [
+    "C++",
+    "Python",
+    "JavaScript",
+    "SQL",
+    "Node.js",
+    "Express.js",
+    "RESTful APIs",
+    "PHP",
+    "JWT Authentication",
+    "React.js",
+    "HTML5",
+    "CSS3",
+    "Chart.js",
+    "MySQL",
+    "Database Schema Design",
+    "Git",
+    "GitHub",
+    "Postman",
+    "Linux",
+    "Data Structures & Algorithms",
+    "DBMS",
+    "Operating Systems",
+    "PyTorch",
+    "Deep Learning",
+    "Machine Learning"
+  ],
+  "experiences": [
+    {
+      "company": "Alcheringa – IIT Guwahati",
+      "role": "Associate, PR & Branding",
+      "duration": "Apr 2026-Present",
+      "description": "Supervised ideation, planning, and end-to-end execution of ~50 competitions across India. Managed 10,000+ participants, coordinating logistics, outreach, and on-ground operations.",
+      "skills_used": ["Public Relations", "Branding", "Operations", "Team Leadership"]
+    },
+    {
+      "company": "Spirit Sports Festival, IIT Guwahati",
+      "role": "Associate",
+      "duration": "Sept-Oct 2024",
+      "description": "Coordinated logistics and on-ground execution for multiple events at IIT Guwahati's annual sports festival.",
+      "skills_used": ["Event Management", "Logistics", "Operations"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "IIT Guwahati",
+      "degree": "B.Tech",
+      "field_of_study": "Data Science & Artificial Intelligence",
+      "start_date": "2024",
+      "end_date": "Present",
+      "gpa": "5.17"
+    },
+    {
+      "institution": "New Vision Jr. College",
+      "degree": "HSC",
+      "field_of_study": "State Board – Senior Secondary",
+      "start_date": "2021",
+      "end_date": "2023",
+      "gpa": "9.62"
+    },
+    {
+      "institution": "New Vision School",
+      "degree": "SSC",
+      "field_of_study": "General",
+      "start_date": "2019",
+      "end_date": "2021",
+      "gpa": "10.0"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Campus Placement Analytics Portal",
+      "description": "Designed normalized MySQL database modeling 5 years of placement data across 15+ IITs. Built RESTful PHP backend with parameterized PDO queries, reducing SQL injection risks and improving query performance by 40%. Implemented dynamic visualizations (Bar, Stacked Area, Heatmap, Treemap) via Chart.js with client-side filtering.",
+      "skills_used": ["PHP", "REST APIs", "MySQL", "JavaScript", "Chart.js", "DataTables.js", "Database Schema Design"],
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "title": "Personal Knowledge Graph for Conceptual Learning",
+      "description": "Architected full-stack REST API backend using Node.js, Express, and MySQL graph modeling for conceptual dependencies and backlinks. Engineered MVC controllers and routes for notes and graph traversal. Built interactive SVG graph visualization in React with dynamic node selection.",
+      "skills_used": ["React", "Node.js", "Express", "MySQL", "REST APIs", "SVG Visualization", "MVC Architecture"],
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "title": "CardioDetect: Deep Learning and Hybrid ML Pipeline",
+      "description": "Developed custom 3-block CNN in PyTorch using BatchNorm, LeakyReLU, and Dropout to classify ECG images into 4 cardiac conditions with 97.31% accuracy. Built hybrid pipeline extracting CNN feature embeddings and training SVM and Naive Bayes classifiers, achieving 98.39% accuracy.",
+      "skills_used": ["PyTorch", "Deep Learning", "CNN", "SVM", "Naive Bayes", "Computer Vision", "Machine Learning"],
+      "start_date": null,
+      "end_date": null
+    }
+  ],
+  "certifications": []
+}

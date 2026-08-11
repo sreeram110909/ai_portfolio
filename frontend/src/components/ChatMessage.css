@@ -1,0 +1,129 @@
+.chat-row {
+  width: 100%;
+  padding: 16px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.chat-row--user {
+  background: var(--bg-primary);
+}
+
+.chat-row--ai {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.message-wrapper {
+  max-width: var(--composer-max-width);
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  gap: 16px;
+  position: relative;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.chat-row--user .message-avatar {
+  background: var(--text-secondary);
+  color: var(--text-inverse);
+}
+
+.chat-row--ai .message-avatar {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.message-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.message-author {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.copy-btn {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.chat-row:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.message-content {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.msg-p {
+  margin-bottom: 8px;
+}
+
+.msg-p:last-child {
+  margin-bottom: 0;
+}
+
+.msg-break {
+  height: 8px;
+}
+
+.msg-h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 14px 0 6px;
+}
+
+.msg-h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+
+.msg-h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px 0 4px;
+}
+
+.msg-li {
+  margin-left: 18px;
+  margin-bottom: 4px;
+}
+
+.msg-num-item {
+  margin-bottom: 4px;
+}
