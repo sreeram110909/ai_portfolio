@@ -61,17 +61,35 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
             <div className="auth-avatar">C</div>
             <div>
               <h3 className="auth-title">
-                {mode === "signin" ? "Sign in to Chinnu AI" : "Create an Account"}
+                {mode === "signin" ? "Sign In to Chinnu AI" : "Create Account"}
               </h3>
               <p className="auth-desc">
                 {mode === "signin"
-                  ? "Welcome back! Sign in to sync your recruiter sessions."
-                  : "Sign up to save your candidate conversations and evaluations."}
+                  ? "Sign in to access your recruiter account."
+                  : "Sign up to save recruiter conversations."}
               </p>
             </div>
           </div>
           <button className="auth-close-btn" onClick={onClose}>
             ✕
+          </button>
+        </div>
+
+        {/* Mode Toggle Tabs */}
+        <div className="auth-tabs">
+          <button
+            type="button"
+            className={`auth-tab ${mode === "signin" ? "auth-tab--active" : ""}`}
+            onClick={() => handleSwitchMode("signin")}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            className={`auth-tab ${mode === "signup" ? "auth-tab--active" : ""}`}
+            onClick={() => handleSwitchMode("signup")}
+          >
+            Sign Up
           </button>
         </div>
 
@@ -88,7 +106,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 id="auth-name"
                 type="text"
                 className="form-input"
-                placeholder="e.g. Sarah Jenkins"
+                placeholder="e.g. Sreeram Banoth"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}
@@ -104,7 +122,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
               id="auth-email"
               type="email"
               className="form-input"
-              placeholder="recruiter@company.com"
+              placeholder="name@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -154,7 +172,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 className="switch-mode-btn"
                 onClick={() => handleSwitchMode("signup")}
               >
-                Sign up
+                Sign up here
               </button>
             </p>
           ) : (
@@ -165,7 +183,7 @@ export default function AuthModal({ isOpen, onClose, onAuthSuccess }) {
                 className="switch-mode-btn"
                 onClick={() => handleSwitchMode("signin")}
               >
-                Sign in
+                Sign in here
               </button>
             </p>
           )}
