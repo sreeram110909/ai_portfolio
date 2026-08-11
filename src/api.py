@@ -1,14 +1,30 @@
 import io
 import groq
-from fastapi import FastAPI, File, HTTPException, UploadFile, status
+from fastapi import FastAPI, File, HTTPException, UploadFile, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .config import client, model
-from .models import Resume, JobDescription, MatchResult
+from .models import (
+    Resume,
+    JobDescription,
+    MatchResult,
+    UserSignUpRequest,
+    UserSignInRequest,
+    AuthResponse,
+    UserResponse,
+)
 from .parsers import resume_parser, jd_parser
 from .matcher import calculate_match, explain_match
 from .reader import read_pdf, read_resume
+from .database import get_user_by_email, create_user
+from .auth import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    get_current_user,
+    require_current_user,
+)
 
 
 class ResumeParseResponse(BaseModel):
@@ -57,6 +73,62 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/auth/signup", response_model=AuthResponse)
+def sign_up(request: UserSignUpRequest):
+    """Registers a new user and returns an access token."""
+    email = request.email.strip().lower()
+    if not email or "@" not in email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please provide a valid email address.",
+        )
+
+    if len(request.password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 6 characters long.",
+        )
+
+    existing = get_user_by_email(email)
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="An account with this email address already exists.",
+        )
+
+    hashed_pw = hash_password(request.password)
+    user = create_user(email=email, hashed_password=hashed_pw, name=request.name)
+    token = create_access_token(user_id=user["id"], email=user["email"])
+    return {"token": token, "user": user}
+
+
+@app.post("/auth/signin", response_model=AuthResponse)
+def sign_in(request: UserSignInRequest):
+    """Authenticates an existing user and returns an access token."""
+    email = request.email.strip().lower()
+    user_record = get_user_by_email(email)
+
+    if not user_record or not verify_password(request.password, user_record["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password. Please try again.",
+        )
+
+    token = create_access_token(user_id=user_record["id"], email=user_record["email"])
+    user = {
+        "id": user_record["id"],
+        "email": user_record["email"],
+        "name": user_record.get("name") or user_record["email"].split("@")[0],
+    }
+    return {"token": token, "user": user}
+
+
+@app.get("/auth/me")
+def get_current_user_profile(user: dict = Depends(require_current_user)):
+    """Returns the currently authenticated user's profile."""
+    return {"user": user}
 
 
 # Cached candidate profile loaded from default resume/resume.pdf

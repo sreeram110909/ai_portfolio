@@ -15,6 +15,9 @@ export default function Sidebar({
   onOpenSettings,
   isOpen,
   onCloseMobile,
+  currentUser,
+  onOpenAuth,
+  onLogout,
 }) {
   return (
     <>
@@ -161,6 +164,35 @@ export default function Sidebar({
             <span className="nav-icon">⚙️</span>
             <span className="nav-text">Settings</span>
           </button>
+
+          {/* User Account / Auth Section */}
+          <div className="sidebar-auth-row">
+            {currentUser ? (
+              <div className="auth-user-card">
+                <div className="user-avatar">
+                  {currentUser.name ? currentUser.name[0].toUpperCase() : "U"}
+                </div>
+                <div className="user-info">
+                  <span className="user-name">
+                    {currentUser.name || currentUser.email.split("@")[0]}
+                  </span>
+                  <span className="user-email">{currentUser.email}</span>
+                </div>
+                <button
+                  className="auth-logout-btn"
+                  onClick={onLogout}
+                  title="Sign out"
+                >
+                  🚪
+                </button>
+              </div>
+            ) : (
+              <button className="auth-login-btn" onClick={onOpenAuth}>
+                <span className="auth-login-icon">👤</span>
+                <span>Sign In / Sign Up</span>
+              </button>
+            )}
+          </div>
         </div>
       </aside>
     </>

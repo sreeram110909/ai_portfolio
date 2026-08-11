@@ -82,3 +82,26 @@ class MatchResult(BaseModel):
 # Precomputed JSON schemas
 resume_schema = Resume.model_json_schema()
 jd_schema = JobDescription.model_json_schema()
+
+
+class UserSignUpRequest(BaseModel):
+    email: str
+    password: str
+    name: str | None = None
+
+
+class UserSignInRequest(BaseModel):
+    email: str
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    name: str | None = None
+
+
+class AuthResponse(BaseModel):
+    token: str
+    user: UserResponse
+

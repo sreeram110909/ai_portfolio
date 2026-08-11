@@ -1,11 +1,67 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const TOKEN_KEY = "chinnu_ai_auth_token";
 
 const api = axios.create({
   baseURL: API_URL,
   timeout: 120000, // 2 minutes — LLM calls can be slow
 });
+
+// Attach JWT token automatically to all requests if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+/**
+ * Sign up a new user account.
+ */
+export async function signUpUser(email, password, name = null) {
+  const response = await api.post("/auth/signup", {
+    email,
+    password,
+    name,
+  });
+  if (response.data?.token) {
+    localStorage.setItem(TOKEN_KEY, response.data.token);
+  }
+  return response.data;
+}
+
+/**
+ * Sign in with existing user credentials.
+ */
+export async function signInUser(email, password) {
+  const response = await api.post("/auth/signin", {
+    email,
+    password,
+  });
+  if (response.data?.token) {
+    localStorage.setItem(TOKEN_KEY, response.data.token);
+  }
+  return response.data;
+}
+
+/**
+ * Get current authenticated user profile.
+ */
+export async function getCurrentUser() {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) return null;
+  const response = await api.get("/auth/me");
+  return response.data?.user;
+}
+
+/**
+ * Log out user by clearing stored token.
+ */
+export function logoutUser() {
+  localStorage.removeItem(TOKEN_KEY);
+}
 
 /**
  * Retrieves the candidate profile (Resume object) preconfigured on the backend.
@@ -61,6 +117,10 @@ export function getErrorMessage(error) {
   if (error?.response) {
     const detail = error.response.data?.detail;
     if (detail) return detail;
+    if (error.response.status === 400)
+      return detail || "Invalid request. Please check your inputs.";
+    if (error.response.status === 401)
+      return detail || "Invalid email or password. Please try again.";
     if (error.response.status === 429)
       return "Rate limit exceeded. Please try again shortly.";
     if (error.response.status === 502)
