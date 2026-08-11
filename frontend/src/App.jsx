@@ -4,13 +4,9 @@ import Chat from "./components/Chat";
 import Profile from "./components/Profile";
 import JobAnalysis from "./components/JobAnalysis";
 import SettingsModal from "./components/SettingsModal";
-import AuthModal from "./components/AuthModal";
-import LogoutModal from "./components/LogoutModal";
 import {
   getCandidateProfile,
   chatWithCandidate,
-  getCurrentUser,
-  logoutUser,
   getErrorMessage,
 } from "./api/client";
 import "./App.css";
@@ -21,11 +17,6 @@ const THEME_STORAGE_KEY = "chinnu_ai_theme";
 export default function App() {
   // Navigation: "chat" | "profile" | "job"
   const [activeView, setActiveView] = useState("chat");
-
-  // User Auth State
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // Preconfigured candidate profile
   const [candidate, setCandidate] = useState(null);
@@ -85,21 +76,6 @@ export default function App() {
     }
   }, [chatSessions]);
 
-  // Check current user session on mount
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        const user = await getCurrentUser();
-        if (user) {
-          setCurrentUser(user);
-        }
-      } catch (err) {
-        console.error("Auth check failed:", err);
-      }
-    }
-    checkAuth();
-  }, []);
-
   // Load candidate profile on mount
   useEffect(() => {
     async function loadCandidate() {
@@ -120,17 +96,6 @@ export default function App() {
   const currentSession =
     chatSessions.find((s) => s.id === currentSessionId) || chatSessions[0];
   const messages = currentSession ? currentSession.messages : [];
-
-  // Auth Handlers
-  function handleAuthSuccess(user) {
-    setCurrentUser(user);
-    setIsAuthModalOpen(false);
-  }
-
-  function handleConfirmLogout() {
-    logoutUser();
-    setCurrentUser(null);
-  }
 
   // Create a new chat session
   function handleNewChat() {
@@ -277,9 +242,6 @@ export default function App() {
         onOpenSettings={() => setIsSettingsOpen(true)}
         isOpen={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
-        currentUser={currentUser}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onLogout={() => setIsLogoutModalOpen(true)}
       />
 
       {/* Main View Area */}
@@ -329,20 +291,6 @@ export default function App() {
         theme={theme}
         onToggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
         onClearAllHistory={handleClearAllHistory}
-      />
-
-      {/* Sign In / Sign Up Modal */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onAuthSuccess={handleAuthSuccess}
-      />
-
-      {/* Logout Confirmation Modal */}
-      <LogoutModal
-        isOpen={isLogoutModalOpen}
-        onClose={() => setIsLogoutModalOpen(false)}
-        onConfirmLogout={handleConfirmLogout}
       />
     </div>
   );
