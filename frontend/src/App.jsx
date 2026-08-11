@@ -5,6 +5,7 @@ import Profile from "./components/Profile";
 import JobAnalysis from "./components/JobAnalysis";
 import SettingsModal from "./components/SettingsModal";
 import AuthModal from "./components/AuthModal";
+import LogoutModal from "./components/LogoutModal";
 import {
   getCandidateProfile,
   chatWithCandidate,
@@ -24,6 +25,7 @@ export default function App() {
   // User Auth State
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // Preconfigured candidate profile
   const [candidate, setCandidate] = useState(null);
@@ -125,7 +127,7 @@ export default function App() {
     setIsAuthModalOpen(false);
   }
 
-  function handleLogout() {
+  function handleConfirmLogout() {
     logoutUser();
     setCurrentUser(null);
   }
@@ -277,7 +279,7 @@ export default function App() {
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
         currentUser={currentUser}
         onOpenAuth={() => setIsAuthModalOpen(true)}
-        onLogout={handleLogout}
+        onLogout={() => setIsLogoutModalOpen(true)}
       />
 
       {/* Main View Area */}
@@ -334,6 +336,13 @@ export default function App() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onAuthSuccess={handleAuthSuccess}
+      />
+
+      {/* Logout Confirmation Modal */}
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirmLogout={handleConfirmLogout}
       />
     </div>
   );
