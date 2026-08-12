@@ -7,6 +7,28 @@ const api = axios.create({
   timeout: 120000, // 2 minutes — LLM calls can be slow
 });
 
+// Automatically retry once if Render cloud backend is cold-starting (waking up)
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config;
+    if (!config || config.__isRetry) {
+      return Promise.reject(error);
+    }
+    // Retry on network errors or 502/503/504 (typical cloud cold-start codes)
+    const status = error.response ? error.response.status : null;
+    const isColdStart = !status || status === 502 || status === 503 || status === 504;
+
+    if (isColdStart) {
+      config.__isRetry = true;
+      // Wait 3.5 seconds for container to finish booting
+      await new Promise((resolve) => setTimeout(resolve, 3500));
+      return api(config);
+    }
+    return Promise.reject(error);
+  }
+);
+
 /**
  * Retrieves the candidate profile (Resume object) preconfigured on the backend.
  */
@@ -74,15 +96,15 @@ export function getErrorMessage(error) {
     if (typeof data === "string") return data;
     if (error.response.status === 429)
       return "Rate limit exceeded. Please try again shortly.";
-    if (error.response.status === 502)
-      return "AI service is temporarily unavailable. Please try again.";
+    if (error.response.status === 502 || error.response.status === 503)
+      return "The cloud server is warming up. Please try sending your message again in a few seconds.";
     return "An unexpected server error occurred.";
   }
   if (error?.code === "ECONNABORTED") {
-    return "Request timed out. The server might be waking up, please try again in a moment.";
+    return "Request timed out. The cloud server might be waking up, please try again.";
   }
   if (error?.request) {
-    return "Unable to connect to the backend server. Please verify your connection.";
+    return "The free cloud backend was asleep and is waking up (~30s). Please try sending your message again!";
   }
   return error?.message || "An unexpected error occurred.";
 }
