@@ -40,7 +40,7 @@ class JDParseResponse(BaseModel):
 
 
 class MatchRequest(BaseModel):
-    resume: Resume
+    resume: Resume | None = None
     job_description: JobDescription
 
 
@@ -51,7 +51,7 @@ class MatchResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     question: str
-    resume: Resume
+    resume: Resume | None = None
     job_description: JobDescription | None = None
     match_result: MatchResult | None = None
 
@@ -284,8 +284,9 @@ def match_resume_to_jd(request: MatchRequest):
     and generates an LLM explanation of candidate suitability.
     """
     try:
-        match_result = calculate_match(request.resume, request.job_description)
-        analysis = explain_match(request.resume, request.job_description, match_result)
+        resume = request.resume if request.resume is not None else get_default_resume()
+        match_result = calculate_match(resume, request.job_description)
+        analysis = explain_match(resume, request.job_description, match_result)
         return {
             "match": match_result,
             "analysis": analysis,
@@ -322,7 +323,8 @@ def recruiter_chat(request: ChatRequest):
         )
 
     try:
-        candidate_info = request.resume.model_dump_json(indent=2)
+        resume = request.resume if request.resume is not None else get_default_resume()
+        candidate_info = resume.model_dump_json(indent=2)
 
         current_context = ""
 

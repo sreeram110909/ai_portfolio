@@ -59,16 +59,30 @@ export async function chatWithCandidate(
  */
 export function getErrorMessage(error) {
   if (error?.response) {
-    const detail = error.response.data?.detail;
-    if (detail) return detail;
+    const data = error.response.data;
+    if (data?.detail) {
+      if (typeof data.detail === "string") return data.detail;
+      if (Array.isArray(data.detail)) {
+        return data.detail
+          .map((item) => (typeof item === "string" ? item : item.msg || JSON.stringify(item)))
+          .join(", ");
+      }
+      if (typeof data.detail === "object") {
+        return data.detail.msg || JSON.stringify(data.detail);
+      }
+    }
+    if (typeof data === "string") return data;
     if (error.response.status === 429)
       return "Rate limit exceeded. Please try again shortly.";
     if (error.response.status === 502)
       return "AI service is temporarily unavailable. Please try again.";
     return "An unexpected server error occurred.";
   }
+  if (error?.code === "ECONNABORTED") {
+    return "Request timed out. The server might be waking up, please try again in a moment.";
+  }
   if (error?.request) {
-    return "Unable to connect to the backend. Make sure FastAPI is running.";
+    return "Unable to connect to the backend server. Please verify your connection.";
   }
   return error?.message || "An unexpected error occurred.";
 }
