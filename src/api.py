@@ -366,7 +366,11 @@ def recruiter_chat(request: ChatRequest):
         5. If a calculated MATCH RESULT is present in the context, use its calculated score and details without altering or inventing scores.
         6. Clearly distinguish between factual claims from the resume and reasoned suitability assessments.
         7. Keep answers well-structured and focused on what the recruiter is asking.
+        8. FORMATTING STYLE FOR LISTS & PROJECTS:
+           - Always format lists of projects, work experience, or technical skills as clean, structured bulleted lists with bold headers and bullet points for Description and Skills Used.
+           - Avoid raw Markdown tables unless explicitly requested by the recruiter.
         """
+
 
         response = client.chat.completions.create(
             model=model,
