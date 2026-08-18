@@ -11,6 +11,10 @@ if not GROQ_API_KEY:
 
 client = Groq(api_key=GROQ_API_KEY)
 
-MODEL = "openai/gpt-oss-20b"
+MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+if "llama" in MODEL.lower():
+    MODEL = "openai/gpt-oss-20b"
+
 model = MODEL
+
 
