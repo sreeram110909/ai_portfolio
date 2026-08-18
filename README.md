@@ -19,7 +19,7 @@ An intelligent, conversational AI assistant representing **Banoth Sree Ram Nayak
                         └───────┬───────────────┬───────┘
                                 │               │
                 ┌───────────────▼───────┐  ┌────▼──────────────────────┐
-                │ Deterministic Matcher │  │ Groq LLM (llama-3.3-70b)  │
+                │ Deterministic Matcher │  │ Groq LLM (openai/gpt-oss-20b) │
                 │ Skills / Experience   │  │ Context-Grounding Chat &  │
                 │ Qualification Rules   │  │ Suitability Explanation   │
                 └───────────────────────┘  └───────────────────────────┘
@@ -39,7 +39,7 @@ An intelligent, conversational AI assistant representing **Banoth Sree Ram Nayak
 
 ## Tech Stack
 
-- **Backend**: Python 3.11+, FastAPI, Uvicorn, Pydantic v2, PyPDF, Groq API (`llama-3.3-70b-versatile`)
+- **Backend**: Python 3.11+, FastAPI, Uvicorn, Pydantic v2, PyPDF, Groq API (`openai/gpt-oss-20b`)
 - **Frontend**: React 19, Vite, Axios, Vanilla CSS (with CSS design tokens and dark mode)
 - **Deployment**: Render / Railway (Backend) & Vercel (Frontend)
 
